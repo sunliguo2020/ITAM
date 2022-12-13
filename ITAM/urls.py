@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # 电脑显示页面
     path('computer/list/', views.computer_list),
+    path('computer/<int:nid>/edit/', views.computer_edit),
     # 电脑添加页面
     path('computer/add/', views.computer_add),
 

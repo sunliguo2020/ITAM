@@ -33,8 +33,9 @@
                     <th>ID</th>
                     <th>用户名称</th>
                     <th>状态</th>
-                    <th>时间</th>
                     <th>部门</th>
+                    <th>时间</th>
+
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -44,8 +45,8 @@
                     <th scope="row">{{ item.id }}</th>
                     <td>{{ item.username }}</td>
                     <td>{{ item.status }}</td>
-                    <td>{{ item.createdate }}</td>
                     <td>{{ item.depart.departname }}</td>
+                    <td>{{ item.createdate }}</td>
 
                     <td>
                         <a class="btn btn-primary btn-xs" href="">编辑</a>

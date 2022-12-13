@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from . import models
-from app1.utils.form import ComputerModelForm,UserModelForm,DepModelForm
+from app1.utils.form import ComputerModelForm, UserModelForm, DepModelForm
 
 
 # Create your views here.
@@ -59,6 +59,23 @@ def user_add(request):
 
         return redirect('/user/list/')
     return render(request, 'user_add.html', {'form': form})
+
+
+def computer_edit(request, nid):
+    """电脑编辑"""
+    row_obj = models.Computer.objects.filter(id=nid).first()
+
+    if request.method == "GET":
+        form = ComputerModelForm(instance=row_obj)
+        context = {
+            'form': form
+        }
+        return render(request, 'change.html', context)
+    form = ComputerModelForm(request.POST, instance=row_obj)
+    if form.is_valid():
+        form.save()
+        return redirect('/computer/list/')
+    return render(request, 'change.html', {'form': form})
 
 
 def dep_list(request):
