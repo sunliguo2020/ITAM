@@ -35,7 +35,6 @@
                     <th>状态</th>
                     <th>部门</th>
                     <th>时间</th>
-
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -44,13 +43,13 @@
                     <tr>
                     <th scope="row">{{ item.id }}</th>
                     <td>{{ item.username }}</td>
-                    <td>{{ item.status }}</td>
+                    <td>{{ item.get_status_display }}</td>
                     <td>{{ item.depart.departname }}</td>
                     <td>{{ item.createdate }}</td>
 
                     <td>
-                        <a class="btn btn-primary btn-xs" href="">编辑</a>
-                        <a class="btn btn-danger btn-xs" href="">删除</a>
+                        <a class="btn btn-primary btn-xs" href="/user/{{ item.id }}/edit/">编辑</a>
+                        <a class="btn btn-danger btn-xs" href="/user/{{ item.id }}/delete/">删除</a>
                     </td>
                 {% endfor %}
 

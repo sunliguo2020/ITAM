@@ -16,20 +16,26 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from app1 import views
-
+app_name = 'app1'
 urlpatterns = [
     path('admin/', admin.site.urls),
     # 电脑显示页面
     path('computer/list/', views.computer_list),
+    # 电脑编辑
     path('computer/<int:nid>/edit/', views.computer_edit),
     # 电脑添加页面
     path('computer/add/', views.computer_add),
+    # 电脑删除
+    path('computer/<int:nid>/delete/', views.computer_delete),
 
     # 用户管理
-    path('user/list/',views.user_list),
-    path('user/add/',views.user_add),
+    path('user/list/', views.user_list),
+    path('user/add/', views.user_add),
+    path('user/<int:nid>/edit/', views.user_edit),
+    path('user/<int:nid>/delete/', views.user_delete),
 
     # 部门管理
     path('dep/list/', views.dep_list),
     path('dep/add/', views.dep_add),
+    path('dep/<int:nid>/delete/', views.dep_delete, name='dep_delete'),
 ]

@@ -18,8 +18,8 @@ class ComputerModelForm(BootStrapModelForm):
 
 class UserModelForm(BootStrapModelForm):
     class Meta:
-        # fields = "__all__"
-        exclude = ['status']
+        fields = "__all__"
+        # exclude = ['status']
         model = models.User
 
 

@@ -32,12 +32,41 @@ def computer_add(request):
     return render(request, 'computer_add.html', {'form': form})
 
 
+def computer_edit(request, nid):
+    """电脑编辑"""
+    title = '电脑编辑'
+    row_obj = models.Computer.objects.filter(id=nid).first()
+
+    if request.method == "GET":
+        form = ComputerModelForm(instance=row_obj)
+        context = {
+            'form': form,
+            'title': title
+        }
+        return render(request, 'change.html', context)
+    form = ComputerModelForm(request.POST, instance=row_obj)
+    if form.is_valid():
+        form.save()
+        return redirect('/computer/list/')
+    context = {
+        'form': form,
+        'title': title
+    }
+    return render(request, 'change.html', context)
+
+
+def computer_delete(request, nid):
+    """电脑删除"""
+    models.Computer.objects.filter(id=nid).delete()
+
+    return redirect('/computer/list/')
+
+
 def user_list(request):
     queryset = models.User.objects.all()
     context = {
         'queryset': queryset
     }
-
     return render(request, 'user_list.html', context)
 
 
@@ -61,22 +90,25 @@ def user_add(request):
     return render(request, 'user_add.html', {'form': form})
 
 
-def computer_edit(request, nid):
-    """电脑编辑"""
-    row_obj = models.Computer.objects.filter(id=nid).first()
+def user_edit(request, nid):
+    # row_obj = models.User.objects.filter(id=nid).first()
+    row_obj = models.User.objects.get(id=nid)
+    if request.method =="GET":
 
-    if request.method == "GET":
-        form = ComputerModelForm(instance=row_obj)
+        form = UserModelForm(instance=row_obj)
         context = {
             'form': form
         }
         return render(request, 'change.html', context)
-    form = ComputerModelForm(request.POST, instance=row_obj)
+    form = UserModelForm(data=request.POST,instance = row_obj)
     if form.is_valid():
         form.save()
-        return redirect('/computer/list/')
-    return render(request, 'change.html', {'form': form})
+        return redirect('/user/list/')
 
+    context = {
+        "form":form
+    }
+    return render(request, 'change.html', context)
 
 def dep_list(request):
     queryset = models.Department.objects.all()
@@ -104,3 +136,14 @@ def dep_add(request):
         form.save()
         return redirect('/dep/list/')
     return render(request, 'dep_add.html', {'form': form})
+
+
+def user_delete(request,nid):
+    models.User.objects.filter(id=nid).delete()
+
+    return redirect('/user/list/')
+
+
+def dep_delete(request,nid):
+    models.Department.objects.filter(id=nid).delete()
+    return redirect('/dep/list/')
