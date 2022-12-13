@@ -15,7 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from app1 import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # 电脑显示页面
+    path('computer/list/', views.computer_list),
+    # 电脑添加页面
+    path('computer/add/', views.computer_add),
+
+    # 用户管理
+    path('user/list/',views.user_list),
+    path('user/add/',views.user_add),
+
+    # 部门管理
+    path('dep/list/', views.dep_list),
+    path('dep/add/', views.dep_add),
 ]
