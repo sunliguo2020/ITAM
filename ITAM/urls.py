@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from app1 import views
+
 app_name = 'app1'
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,16 +28,19 @@ urlpatterns = [
     path('computer/add/', views.computer_add),
     # 电脑删除
     path('computer/<int:nid>/delete/', views.computer_delete),
+    path('computer/multi/', views.computer_multi),
 
     # 用户管理
     path('user/list/', views.user_list),
     path('user/add/', views.user_add),
     path('user/<int:nid>/edit/', views.user_edit),
     path('user/<int:nid>/delete/', views.user_delete),
+    path('user/multi/', views.user_multi),
 
     # 部门管理
     path('dep/list/', views.dep_list),
     path('dep/add/', views.dep_add),
     path('dep/<int:nid>/delete/', views.dep_delete, name='dep_delete'),
     path('dep/<int:nid>/edit/', views.dep_edit, name='dep_edit'),
+    path('dep/multi/', views.dep_multi),
 ]

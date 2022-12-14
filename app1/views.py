@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from . import models
 from app1.utils.form import ComputerModelForm, UserModelForm, DepModelForm
 from app1.utils.pageination import Pagination
+
+from openpyxl import load_workbook
 
 
 # Create your views here.
@@ -16,7 +18,7 @@ def computer_list(request):
 
     # 根据搜索条件去数据库获取
     queryset = models.Computer.objects.filter(**data_dict)
-    obj = Pagination(request, queryset,page_size=2)
+    obj = Pagination(request, queryset, page_size=2)
     context = {
         "queryset": obj.page_queryset,
         'page_string': obj.html()
@@ -76,8 +78,10 @@ def computer_delete(request, nid):
 
 def user_list(request):
     queryset = models.User.objects.all()
+    page_obj = Pagination(request, queryset)
     context = {
-        'queryset': queryset
+        'queryset': page_obj.page_queryset,
+        'page_string': page_obj.html()
     }
     return render(request, 'user_list.html', context)
 
@@ -179,3 +183,59 @@ def dep_edit(request, nid):
 
         return redirect('/dep/list/')
     return render(request, 'change.html', context)
+
+
+def computer_multi(request):
+    """
+    批量上传文件导入到电脑表中
+    :param request:
+    :return:
+    """
+    file_obj = request.FILES.get('excel')
+    # print(type(file_obj))
+    # <class 'django.core.files.uploadedfile.TemporaryUploadedFile'>
+    wb = load_workbook(file_obj)
+    sheet = wb.worksheets[0]
+    for row in sheet.iter_rows(min_row=2):
+        print(row)
+
+    return HttpResponse('')
+
+
+def dep_multi(request):
+    """
+    批量上传文件导入到部门表
+    :param request:
+    :return:
+    """
+    file_obj = request.FILES.get('excel')
+    if not file_obj:
+        return redirect('/dep/list/')
+    # 判断是否是excel文件
+    wb = load_workbook(file_obj)
+    sheet = wb.worksheets[0]
+    for row in sheet.iter_rows(min_row=2):
+        row_value = row[0].value
+        if row[0].value and not models.Department.objects.filter(departname=row_value).exists():
+            models.Department.objects.create(departname=row_value)
+    return redirect('/dep/list/')
+
+
+def user_multi(request):
+    """
+    批量上传文件导入到部门表
+    :param request:
+    :return:
+    """
+    file_obj = request.FILES.get('excel')
+    if not file_obj:
+        return redirect('/user/list/')
+    # 判断是否是excel文件
+    wb = load_workbook(file_obj)
+    sheet = wb.worksheets[0]
+    for row in sheet.iter_rows(min_row=2):
+        row_value = row[0].value
+        print(row_value)
+        if row[0].value and not models.User.objects.filter(username=row_value).exists():
+            models.User.objects.create(username=row_value, status=None)
+    return redirect('/user/list/')

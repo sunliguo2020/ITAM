@@ -1,6 +1,19 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="container">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true">批量上传</span>
+                <form method="post" enctype="multipart/form-data" action="/dep/multi/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="file" name="excel">
+                    </div>
+                    <button type="submit" value="上传" class="btn btn-primary">上传</button>
+                </form>
+            </div>
+        </div>
         <div style="margin-bottom: 10px">
             <a class="btn btn-success" href="/dep/add/">
                 <span class="glyphicon glyphicon-plus-sign " aria-hidden="true"></span>
@@ -18,44 +31,45 @@
 
             </div>
         </div>
-    </div>
-    <div class="bs-example" data-example-id="panel-without-body-with-table">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading">
-                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>用户
-            </div>
+        <div class="bs-example" data-example-id="panel-without-body-with-table">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>用户
+                </div>
 
-            <!-- Table -->
-            <table class="table table-bordered table-striped table-hover ">
-                <thead>
-                <tr>
-                    <th style="text-align: center;">序号</th>
-                    <th>部门名称</th>
-                    <th>创建时间</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in queryset %}
+                <!-- Table -->
+                <table class="table table-bordered table-striped table-hover ">
+                    <thead>
                     <tr>
-                    <th style="text-align: center;" title="{{ item.id }}">{{ forloop.counter }}</th>
-                    <td>{{ item.departname }}</td>
-                    <td>{{ item.createdate }}</td>
+                        <th style="text-align: center;">序号</th>
+                        <th>部门名称</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in queryset %}
+                        <tr>
+                        <th style="text-align: center;" title="{{ item.id }}">{{ forloop.counter }}</th>
+                        <td>{{ item.departname }}</td>
+                        <td>{{ item.createdate }}</td>
 
-                    <td>
-                        <a class="btn btn-primary btn-xs" href="/dep/{{ item.id }}/edit/">编辑</a>
-                        <a class="btn btn-danger btn-xs" href="/dep/{{ item.id }}/delete/">删除</a>
-                    </td>
-                {% endfor %}
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="/dep/{{ item.id }}/edit/">编辑</a>
+                            <a class="btn btn-danger btn-xs" href="/dep/{{ item.id }}/delete/">删除</a>
+                        </td>
+                    {% endfor %}
 
-                </tbody>
-            </table>
-        </div>
-        <div class="clearfix">
-            <ul class="pagination">
-                {{ pagestring }}
-            </ul>
+                    </tbody>
+                </table>
+            </div>
+            <div class="clearfix">
+                <ul class="pagination">
+                    {{ pagestring }}
+                </ul>
+            </div>
         </div>
     </div>
+
 {% endblock %}

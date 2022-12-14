@@ -20,6 +20,9 @@ class ComputerModelForm(BootStrapModelForm):
         error_messages = {
             'serial_number': {
                 'unique': '此序列号已经存在!',
+            },
+            'mac_addr': {
+                'required': '若暂时不知道MAC，请填写FFFF-FFFF-FFFF'
             }
         }
 

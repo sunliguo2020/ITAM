@@ -2,10 +2,24 @@
 {% block content %}
 
     <div class="container">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true">批量上传</span>
+                <form method="post" enctype="multipart/form-data" action="/computer/multi/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="file" name="excel">
+                    </div>
+                    <button type="submit" value="上传" class="btn btn-primary">上传</button>
+                </form>
+            </div>
+        </div>
+
         <div style="margin-bottom: 10px">
             <a class="btn btn-success" href="/computer/add/">
-                <span class="glyphicon glyphicon-plus-sign " aria-hidden="true"></span>
-                新建电脑</a>
+                <span class="glyphicon glyphicon-plus-sign " aria-hidden="true">新建电脑</span>
+            </a>
             <div style="float:right;width: 300px">
                 <form method="get">
                     <div class="input-group">
@@ -19,50 +33,53 @@
 
             </div>
         </div>
-    </div>
-    <div class="bs-example" data-example-id="panel-without-body-with-table">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading">
-                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>电脑列表
-            </div>
+        <div class="bs-example" data-example-id="panel-without-body-with-table">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>电脑列表
+                </div>
 
-            <!-- Table -->
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>序号</th>
-                    <th>品牌</th>
-                    <th>型号</th>
-                    <th>序列号</th>
-                    <th>MAC地址</th>
-                    <th>使用者</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in queryset %}
+                <!-- Table -->
+                <table class="table table-bordered">
+                    <thead>
                     <tr>
-                    <th scope="row" title="{{ item.id }}">{{ forloop.counter }}</th>
-                    <td>{{ item.get_brand_display }}</td>
-                    <td>{{ item.computer_type }}</td>
-                    <td>{{ item.serial_number }}</td>
-                    <td>{{ item.mac_addr|upper }}</td>
-                    <td>{{ item.owner.username }}</td>
+                        <th>序号</th>
+                        <th>品牌</th>
+                        <th>型号</th>
+                        <th>序列号</th>
+                        <th>MAC地址</th>
+                        <th>使用者</th>
+                        <th>最后修改时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in queryset %}
+                        <tr>
+                        <th scope="row" title="{{ item.id }}">{{ forloop.counter }}</th>
+                        <td>{{ item.get_brand_display }}</td>
+                        <td>{{ item.computer_type }}</td>
+                        <td>{{ item.serial_number }}</td>
+                        <td>{{ item.mac_addr|upper }}</td>
+                        <td>{{ item.owner.username }}</td>
+                        <td>{{ item.mod_time|date:'Y-m-d G:i:s' }}</td>
 
-                    <td>
-                        <a class="btn btn-primary btn-xs" href="/computer/{{ item.id }}/edit/">编辑</a>
-                        <a class="btn btn-danger btn-xs" href="/computer/{{ item.id }}/delete/">删除</a>
-                    </td>
-                {% endfor %}
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="/computer/{{ item.id }}/edit/">编辑</a>
+                            <a class="btn btn-danger btn-xs" href="/computer/{{ item.id }}/delete/">删除</a>
+                        </td>
+                    {% endfor %}
 
-                </tbody>
-            </table>
-        </div>
-        <div class="clearfix">
-            <ul class="pagination">
-                {{ page_string }}
-            </ul>
+                    </tbody>
+                </table>
+            </div>
+            <div class="clearfix">
+                <ul class="pagination">
+                    {{ page_string }}
+                </ul>
+            </div>
         </div>
     </div>
+
 {% endblock %}

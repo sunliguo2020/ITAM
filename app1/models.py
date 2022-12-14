@@ -23,9 +23,9 @@ class User(models.Model):
         (0, '正常'),
         (1, '失效'),
     )
-    username = models.CharField(verbose_name='用户名称', max_length=16)
+    username = models.CharField(verbose_name='用户名称', max_length=16,unique=True)
     depart = models.ForeignKey(verbose_name='所在部门', to=Department, on_delete=models.SET_NULL, null=True)
-    status = models.SmallIntegerField(verbose_name='状态', choices=STATUS, default=None)
+    status = models.SmallIntegerField(verbose_name='状态', choices=STATUS, default=None,null=True)
     createdate = models.DateTimeField(verbose_name='创建日期', auto_now_add=True)
 
     class Meta:
@@ -47,3 +47,4 @@ class Computer(models.Model):
     owner = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, verbose_name='拥有者')
     production_date = models.DateField(verbose_name='生产日期',default=timezone.now)
     mac_addr = models.CharField(max_length=14,default=None,verbose_name='MAC地址')
+    mod_time = models.DateTimeField(verbose_name='最后修改时间',auto_now=True)
