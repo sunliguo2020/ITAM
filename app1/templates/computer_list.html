@@ -31,23 +31,23 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>序号</th>
                     <th>品牌</th>
                     <th>型号</th>
                     <th>序列号</th>
                     <th>MAC地址</th>
-                    <th>拥有者</th>
+                    <th>使用者</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for item in queryset %}
                     <tr>
-                    <th scope="row">{{ item.id }}</th>
+                    <th scope="row" title="{{ item.id }}">{{ forloop.counter }}</th>
                     <td>{{ item.get_brand_display }}</td>
                     <td>{{ item.computer_type }}</td>
                     <td>{{ item.serial_number }}</td>
-                    <td>{{ item.mac_addr }}</td>
+                    <td>{{ item.mac_addr|upper }}</td>
                     <td>{{ item.owner.username }}</td>
 
                     <td>
