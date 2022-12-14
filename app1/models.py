@@ -1,4 +1,8 @@
+import datetime
+import time
+
 from django.db import models
+from django.utils import timezone
 
 
 # Create your models here.
@@ -20,8 +24,8 @@ class User(models.Model):
         (1, '失效'),
     )
     username = models.CharField(verbose_name='用户名称', max_length=16)
-    depart = models.ForeignKey(verbose_name='所在部门', to=Department, on_delete=models.SET_NULL,null=True)
-    status = models.SmallIntegerField(verbose_name='状态', choices=STATUS,default=None)
+    depart = models.ForeignKey(verbose_name='所在部门', to=Department, on_delete=models.SET_NULL, null=True)
+    status = models.SmallIntegerField(verbose_name='状态', choices=STATUS, default=None)
     createdate = models.DateTimeField(verbose_name='创建日期', auto_now_add=True)
 
     class Meta:
@@ -40,4 +44,6 @@ class Computer(models.Model):
     computer_type = models.CharField(max_length=16, verbose_name='型号')
     serial_number = models.CharField(max_length=32, verbose_name='序列号', unique=True)
     # 生成字段 owner_id
-    owner = models.ForeignKey(to=User, on_delete=models.SET_NULL,null=True, verbose_name='拥有者')
+    owner = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, verbose_name='拥有者')
+    production_date = models.DateField(verbose_name='生产日期',default=timezone.now)
+    mac_addr = models.CharField(max_length=14,default=None,verbose_name='MAC地址')

@@ -147,3 +147,24 @@ def user_delete(request,nid):
 def dep_delete(request,nid):
     models.Department.objects.filter(id=nid).delete()
     return redirect('/dep/list/')
+
+
+def dep_edit(request,nid):
+    row_obj = models.Department.objects.filter(id=nid).first()
+    if request.method == "GET":
+
+        form = DepModelForm(instance = row_obj)
+        context ={
+            "form":form
+        }
+        return render(request,'change.html',context)
+
+    form = DepModelForm(data = request.POST,instance = row_obj)
+    context = {
+        'form': form
+    }
+    if form.is_valid():
+        form.save()
+
+        return redirect('/dep/list/')
+    return render(request,'change.html',context)

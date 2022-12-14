@@ -27,10 +27,10 @@
             </div>
 
             <!-- Table -->
-            <table class="table table-bordered ">
+            <table class="table table-bordered table-striped table-hover ">
                 <thead>
                 <tr>
-                    <th style="text-align: center;">ID</th>
+                    <th style="text-align: center;">序号</th>
                     <th>部门名称</th>
                     <th>创建时间</th>
                     <th>操作</th>
@@ -44,7 +44,7 @@
                     <td>{{ item.createdate }}</td>
 
                     <td>
-                        <a class="btn btn-primary btn-xs" href="">编辑</a>
+                        <a class="btn btn-primary btn-xs" href="/dep/{{ item.id }}/edit/">编辑</a>
                         <a class="btn btn-danger btn-xs" href="/dep/{{ item.id }}/delete/">删除</a>
                     </td>
                 {% endfor %}

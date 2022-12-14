@@ -14,6 +14,11 @@ class ComputerModelForm(BootStrapModelForm):
     class Meta:
         fields = "__all__"
         model = models.Computer
+        error_messages = {
+            'serial_number': {
+                'unique': '此序列号已经存在!',
+            }
+        }
 
 
 class UserModelForm(BootStrapModelForm):
@@ -27,3 +32,11 @@ class DepModelForm(BootStrapModelForm):
     class Meta:
         fields = "__all__"
         model = models.Department
+
+        labels = {
+            'departname': '科室',
+        }
+        error_messages = {
+            'departname': {'required': '科室不能为空！',
+                           'unique': '有重名的科室'}
+        }

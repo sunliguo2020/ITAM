@@ -38,4 +38,5 @@ urlpatterns = [
     path('dep/list/', views.dep_list),
     path('dep/add/', views.dep_add),
     path('dep/<int:nid>/delete/', views.dep_delete, name='dep_delete'),
+    path('dep/<int:nid>/edit/', views.dep_edit, name='dep_edit'),
 ]
