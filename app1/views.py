@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
+from django.utils import timezone
+
 from . import models
 from app1.utils.form import ComputerModelForm, UserModelForm, DepModelForm
 from app1.utils.pageination import Pagination
@@ -18,7 +20,7 @@ def computer_list(request):
 
     # 根据搜索条件去数据库获取
     queryset = models.Computer.objects.filter(**data_dict)
-    obj = Pagination(request, queryset, page_size=2)
+    obj = Pagination(request, queryset, page_size=10)
     context = {
         "queryset": obj.page_queryset,
         'page_string': obj.html()
@@ -77,7 +79,14 @@ def computer_delete(request, nid):
 
 
 def user_list(request):
-    queryset = models.User.objects.all()
+    # 构造搜索
+    data_dict = {}
+    search_data = request.GET.get('q', "")
+
+    if search_data:
+        # 查询条件
+        data_dict['username__contains'] = search_data
+    queryset = models.User.objects.filter(**data_dict)
     page_obj = Pagination(request, queryset)
     context = {
         'queryset': page_obj.page_queryset,
@@ -191,14 +200,37 @@ def computer_multi(request):
     :param request:
     :return:
     """
-    file_obj = request.FILES.get('excel')
+    # 是否上传空文件
+    file_obj = request.FILES.get('excel', None)
+    if not file_obj:
+        return redirect('/dep/list/')
+
     # print(type(file_obj))
     # <class 'django.core.files.uploadedfile.TemporaryUploadedFile'>
     wb = load_workbook(file_obj)
     sheet = wb.worksheets[0]
     for row in sheet.iter_rows(min_row=2):
-        print(row)
+        # print(row[2].value)
+        # brand, computer_type, serial_number, owner, production_date, mac_addr = [row[i].value for i in range(6)]
+        # own_obj = models.User.objects.filter(username=owner).first()
 
+        # 检查序列号是否已经存在
+        if models.Computer.objects.filter(serial_number=row[2].value).exists():
+            # print(row[2].value,'已经存在')
+            continue
+
+        data_dict = {
+            'brand': row[0].value,
+            'computer_type': row[1].value,
+            'serial_number': row[2].value,
+            'owner': models.User.objects.filter(username=row[3].value).first(),
+            'production_date': row[4].value,
+            'mac_addr': row[5].value,
+        }
+        # 判断生产日期的格式
+        if not data_dict.get('production_date'):
+            data_dict['production_date'] = timezone.now()
+        models.Computer.objects.create(**data_dict)
     return HttpResponse('')
 
 
@@ -208,7 +240,7 @@ def dep_multi(request):
     :param request:
     :return:
     """
-    file_obj = request.FILES.get('excel')
+    file_obj = request.FILES.get('excel', None)
     if not file_obj:
         return redirect('/dep/list/')
     # 判断是否是excel文件
