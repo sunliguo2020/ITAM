@@ -70,7 +70,7 @@
                         <th scope="row" title="{{ item.id }}">{{ forloop.counter }}</th>
                         <td>{{ item.get_brand_display }}</td>
                         <td>{{ item.computer_type }}</td>
-                        <td>{{ item.serial_number|upper}}</td>
+                        <td><a href="/media/{{ item.img|default:'computer/none.jpg' }}">{{ item.serial_number|upper}}</a></td>
                         <td>{{ item.production_date|date:'Y-m-d' }}</td>
                         <td>{{ item.mac_addr|upper }}</td>
                         <td>{{ item.owner.username }}</td>
