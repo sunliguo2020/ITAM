@@ -13,13 +13,28 @@ def computer_list(request):
     # 构造搜索
     data_dict = {}
     search_data = request.GET.get('q', "")
+    search_type = request.GET.get('search_type', '')
 
     if search_data:
         # 查询条件
-        data_dict['serial_number__contains'] = search_data
+        if search_type == 'seri':
+            data_dict['serial_number__contains'] = search_data
+            queryset = models.Computer.objects.filter(**data_dict)
+        elif search_type == 'owner':
+            # data_dict['owner__contains'] = search_data
+            owner_obj = models.User.objects.filter(username__contains=search_data)
+            # print(owner_obj)
+            if owner_obj is not None:
+                # 模糊查询
+                queryset = models.Computer.objects.none()
+                for item in owner_obj:
+                    queryset = queryset | item.owners.all()
+            else:  # 没有搜到使用者
+                queryset = models.Computer.objects.none()
 
-    # 根据搜索条件去数据库获取
-    queryset = models.Computer.objects.filter(**data_dict)
+    else:
+        queryset = models.Computer.objects.filter()
+
     obj = Pagination(request, queryset, page_size=10)
     context = {
         "queryset": obj.page_queryset,
@@ -223,15 +238,17 @@ def computer_multi(request):
             'brand': row[0].value,
             'computer_type': row[1].value,
             'serial_number': row[2].value,
-            'owner': models.User.objects.filter(username=row[3].value).first(),
+            'owner': models.User.objects.filter(username=row[3].value).first(),  # 查询用户表
             'production_date': row[4].value,
             'mac_addr': row[5].value,
         }
         # 判断生产日期的格式
         if not data_dict.get('production_date'):
             data_dict['production_date'] = timezone.now()
+
         models.Computer.objects.create(**data_dict)
-    return HttpResponse('')
+
+    return redirect('/computer/list/')
 
 
 def dep_multi(request):

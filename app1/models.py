@@ -44,7 +44,7 @@ class Computer(models.Model):
     computer_type = models.CharField(max_length=16, verbose_name='型号',null=True)
     serial_number = models.CharField(max_length=32, verbose_name='序列号', unique=True)
     # 生成字段 owner_id
-    owner = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, verbose_name='拥有者')
+    owner = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, verbose_name='拥有者',related_name='owners')
     production_date = models.DateField(verbose_name='生产日期',default=timezone.now)
     mac_addr = models.CharField(max_length=14,default=None,verbose_name='MAC地址')
     mod_time = models.DateTimeField(verbose_name='最后修改时间',auto_now=True)

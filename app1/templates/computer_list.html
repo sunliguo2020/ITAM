@@ -20,15 +20,24 @@
             <a class="btn btn-success" href="/computer/add/">
                 <span class="glyphicon glyphicon-plus-sign " aria-hidden="true">新建电脑</span>
             </a>
+
             <div style="float:right;width: 300px">
                 <form method="get">
+
                     <div class="input-group">
+                        <div style="float: right">
+                            <select name="search_type" id="">
+                                <option value="owner">使用者</option>
+                                <option value="seri">序列号</option>
+                            </select>
+                        </div>
                         <input type="text" name='q' class="form-control" placeholder="关键字" value="{{ search_data }}">
                         <span class="input-group-btn">
                         <button class="btn btn-default" type="submit">
                             <span class="glyphicon glyphicon-search " aria-hidden="true"> </span>
                         </button>
                         </span>
+                    </div>
                 </form>
 
             </div>
