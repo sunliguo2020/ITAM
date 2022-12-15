@@ -1,3 +1,6 @@
+import os
+
+from django.conf import settings
 from django.shortcuts import render, redirect, HttpResponse
 from django.utils import timezone
 
@@ -75,7 +78,10 @@ def computer_edit(request, nid):
             'title': title
         }
         return render(request, 'change.html', context)
-    form = ComputerModelForm(request.POST, instance=row_obj)
+
+    # 忘记添加files参数导致不能修改
+    # form 中没有添加 enctype="multipart/form-data"
+    form = ComputerModelForm(data=request.POST,files=request.FILES, instance=row_obj)
     if form.is_valid():
         form.save()
         return redirect('/computer/list/')
@@ -87,7 +93,16 @@ def computer_edit(request, nid):
 
 
 def computer_delete(request, nid):
-    """电脑删除"""
+    """
+    删除电脑
+    """
+    # 删除文件
+    file_path = models.Computer.objects.filter(id=nid).values('img')
+    # print(file_path[0].get('img'))
+    file_full_path = os.path.join(settings.MEDIA_ROOT, file_path[0].get('img'))
+    if os.path.isfile(file_full_path):
+        os.remove(file_full_path)
+    """电脑记录删除"""
     models.Computer.objects.filter(id=nid).delete()
 
     return redirect('/computer/list/')
