@@ -6,7 +6,7 @@
                 <h3 class="panel-title">添加电脑</h3>
             </div>
             <div class="panel-body">
-                <form method="post" class="panel-body " novalidate>
+                <form method="post" class="panel-body " enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="form-group">

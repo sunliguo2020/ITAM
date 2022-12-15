@@ -55,10 +55,10 @@ def computer_add(request):
             "form": form
         }
         return render(request, 'computer_add.html', context)
-    form = ComputerModelForm(request.POST)
+
+    form = ComputerModelForm(data=request.POST, files=request.FILES)
     if form.is_valid():
         form.save()
-
         return redirect('/computer/list/')
     return render(request, 'computer_add.html', {'form': form})
 
@@ -101,6 +101,7 @@ def user_list(request):
     if search_data:
         # 查询条件
         data_dict['username__contains'] = search_data
+
     queryset = models.User.objects.filter(**data_dict)
     page_obj = Pagination(request, queryset)
     context = {

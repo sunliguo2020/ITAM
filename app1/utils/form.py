@@ -19,6 +19,7 @@ class ComputerModelForm(BootStrapModelForm):
         model = models.Computer
         labels = {
             'owner': '使用者',
+            'img':'铭牌',
         }
         error_messages = {
             'serial_number': {
