@@ -185,3 +185,23 @@ class AdminResetModelForm(BootStrapModelForm):
             raise ValidationError("密码不一致")
         # 返回什么，此字段以后保存到数据库中就是什么
         return confirm
+
+
+class IpModelForm(BootStrapModelForm):
+    class Meta:
+        fields = "__all__"
+        model = models.IpAddr
+
+    def clean_mac_addr(self):
+        """
+        检查mac地址的合法性
+        :return:
+        """
+        mac_addr = self.cleaned_data.get('mac_addr')
+        valid = re.compile(r'''
+                            (^([0-9A-F]{4}[-])([0-9A-f]{4}[-])([0-9A-F]{4})$)
+                            ''',
+                           re.VERBOSE | re.IGNORECASE)
+        if not valid.match(mac_addr):
+            raise ValidationError('注意MAC地址的格式XXXX-XXXX-XXXX')
+        return mac_addr
