@@ -4,11 +4,11 @@
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading">
-                <span class="glyphicon glyphicon-th-list" aria-hidden="true">批量上传</span>
-                <form method="post" enctype="multipart/form-data" action="/dep/multi/">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true">批量上传(csv格式)</span>
+                <form method="post" enctype="multipart/form-data" action="/ip/multi/">
                     {% csrf_token %}
                     <div class="form-group">
-                        <input type="file" name="excel">
+                        <input type="file" name="csv_file">
                     </div>
                     <button type="submit" value="上传" class="btn btn-primary">上传</button>
                 </form>
