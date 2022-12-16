@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true">批量上传</span>
+                <form method="post" enctype="multipart/form-data" action="/dep/multi/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="file" name="excel">
+                    </div>
+                    <button type="submit" value="上传" class="btn btn-primary">上传</button>
+                </form>
+            </div>
+        </div>
+        <div style="margin-bottom: 10px">
+            <a class="btn btn-success" href="/ip/add/">
+                <span class="glyphicon glyphicon-plus-sign " aria-hidden="true"></span>
+                新增Ip地址</a>
+            <div style="float:right;width: 300px">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" name='q' class="form-control" placeholder="关键字" value="{{ search_data }}">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <span class="glyphicon glyphicon-search " aria-hidden="true"> </span>
+                        </button>
+                        </span>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div class="bs-example" data-example-id="panel-without-body-with-table">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>IP列表
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered table-striped table-hover ">
+                <thead>
+                <tr>
+                    <th style="text-align: center;">序号</th>
+                    <th>IP地址</th>
+                    <th>MAC地址</th>
+                    <th>接口</th>
+                    <th>采集时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in queryset %}
+                    <tr>
+                    <th style="text-align: center;" title="{{ item.id }}">{{ forloop.counter }}</th>
+                    <td>{{ item.ip_addr }}</td>
+                    <td>{{ item.mac_addr }}</td>
+                    <td>{{ item.interface }}</td>
+                    <td>{{ item.cap_datetime }}</td>
+
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="/ip/{{ item.id }}/edit/">编辑</a>
+                        <a class="btn btn-danger btn-xs" href="/ip/{{ item.id }}/delete/">删除</a>
+                    </td>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <div class="clearfix">
+            <ul class="pagination">
+                {{ page_string }}
+            </ul>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

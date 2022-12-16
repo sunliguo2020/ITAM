@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.views.static import serve
 
-from app1.views import computer, user, dep, account,admin
+from app1.views import computer, user, dep, account, admin, ip
 
 app_name = 'app1'
 urlpatterns = [
@@ -28,13 +28,13 @@ urlpatterns = [
     path('login/', account.login),
     path('image/code/', account.image_code),
 
-    path('logout/',account.logout),
+    path('logout/', account.logout),
 
     # 管理员
-    path('admin/list/',admin.admin_list),
-    path('admin/add/',admin.admin_add),
-    path('admin/<int:nid>/delete/',admin.admin_delete),
-    path('admin/<int:nid>/reset/',admin.admin_reset),
+    path('admin/list/', admin.admin_list),
+    path('admin/add/', admin.admin_add),
+    path('admin/<int:nid>/delete/', admin.admin_delete),
+    path('admin/<int:nid>/reset/', admin.admin_reset),
 
     # 显示图片
     # re_path(r'meida/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
@@ -62,4 +62,10 @@ urlpatterns = [
     path('dep/<int:nid>/delete/', dep.dep_delete, name='dep_delete'),
     path('dep/<int:nid>/edit/', dep.dep_edit, name='dep_edit'),
     path('dep/multi/', dep.dep_multi),
+
+    # Ip地址管理
+    path('ip/list/', ip.ip_list),
+    path('ip/add/', ip.ip_add),
+    path('ip/<int:nid>/edit/', ip.ip_edit),
+    path('ip/<int:nid>/delete/', ip.ip_delete),
 ]
