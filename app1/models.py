@@ -37,7 +37,7 @@ class Computer(models.Model):
         (0, '联想'),
         (1, '惠普'),
     )
-    brand = models.SmallIntegerField(verbose_name='品牌', choices=brand_choices,default=0)
+    brand = models.SmallIntegerField(verbose_name='品牌', choices=brand_choices, default=0)
     computer_type = models.CharField(max_length=16, verbose_name='型号', null=True)
     serial_number = models.CharField(max_length=32, verbose_name='序列号', unique=True)
     # 生成字段 owner_id
@@ -47,7 +47,7 @@ class Computer(models.Model):
     production_date = models.DateField(verbose_name='生产日期', default=timezone.now)
     mac_addr = models.CharField(max_length=14, default=None, verbose_name='MAC地址')
     mod_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
-    img = models.FileField(verbose_name='图片',upload_to='computer/',null=True)
+    img = models.FileField(verbose_name='图片', upload_to='computer/', null=True)
 
 
 class Admin(models.Model):
@@ -57,3 +57,10 @@ class Admin(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class IpAddr(models.Model):
+    ip_addr = models.CharField(verbose_name='IP地址', max_length=16)
+    mac_addr = models.CharField(verbose_name='MAC地址', max_length=14)
+    interface = models.CharField(verbose_name='接口', max_length=16)
+    cap_datetime = models.DateTimeField(verbose_name='采集时间')
