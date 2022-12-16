@@ -37,7 +37,7 @@ class Computer(models.Model):
         (0, '联想'),
         (1, '惠普'),
     )
-    brand = models.SmallIntegerField(verbose_name='品牌', choices=brand_choices)
+    brand = models.SmallIntegerField(verbose_name='品牌', choices=brand_choices,default=0)
     computer_type = models.CharField(max_length=16, verbose_name='型号', null=True)
     serial_number = models.CharField(max_length=32, verbose_name='序列号', unique=True)
     # 生成字段 owner_id
