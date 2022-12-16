@@ -68,4 +68,5 @@ urlpatterns = [
     path('ip/add/', ip.ip_add),
     path('ip/<int:nid>/edit/', ip.ip_edit),
     path('ip/<int:nid>/delete/', ip.ip_delete),
+    path('ip/multi/', ip.ip_multi),
 ]
