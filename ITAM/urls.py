@@ -18,35 +18,48 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.views.static import serve
 
-from app1 import views
+from app1.views import computer, user, dep, account,admin
 
 app_name = 'app1'
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
+
+    # 登录
+    path('login/', account.login),
+    path('image/code/', account.image_code),
+
+    path('logout/',account.logout),
+
+    # 管理员
+    path('admin/list/',admin.admin_list),
+    path('admin/add/',admin.admin_add),
+    path('admin/<int:nid>/delete/',admin.admin_delete),
+    path('admin/<int:nid>/reset/',admin.admin_reset),
+
     # 显示图片
     # re_path(r'meida/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
     re_path('media/(?P<path>.*)', serve, {"document_root": settings.MEDIA_ROOT}),
     # 电脑显示页面
-    path('computer/list/', views.computer_list),
+    path('computer/list/', computer.computer_list),
     # 电脑编辑
-    path('computer/<int:nid>/edit/', views.computer_edit),
+    path('computer/<int:nid>/edit/', computer.computer_edit),
     # 电脑添加页面
-    path('computer/add/', views.computer_add),
+    path('computer/add/', computer.computer_add),
     # 电脑删除
-    path('computer/<int:nid>/delete/', views.computer_delete),
-    path('computer/multi/', views.computer_multi),
+    path('computer/<int:nid>/delete/', computer.computer_delete),
+    path('computer/multi/', computer.computer_multi),
 
     # 用户管理
-    path('user/list/', views.user_list),
-    path('user/add/', views.user_add),
-    path('user/<int:nid>/edit/', views.user_edit),
-    path('user/<int:nid>/delete/', views.user_delete),
-    path('user/multi/', views.user_multi),
+    path('user/list/', user.user_list),
+    path('user/add/', user.user_add),
+    path('user/<int:nid>/edit/', user.user_edit),
+    path('user/<int:nid>/delete/', user.user_delete),
+    path('user/multi/', user.user_multi),
 
     # 部门管理
-    path('dep/list/', views.dep_list),
-    path('dep/add/', views.dep_add),
-    path('dep/<int:nid>/delete/', views.dep_delete, name='dep_delete'),
-    path('dep/<int:nid>/edit/', views.dep_edit, name='dep_edit'),
-    path('dep/multi/', views.dep_multi),
+    path('dep/list/', dep.dep_list),
+    path('dep/add/', dep.dep_add),
+    path('dep/<int:nid>/delete/', dep.dep_delete, name='dep_delete'),
+    path('dep/<int:nid>/edit/', dep.dep_edit, name='dep_edit'),
+    path('dep/multi/', dep.dep_multi),
 ]

@@ -48,3 +48,12 @@ class Computer(models.Model):
     mac_addr = models.CharField(max_length=14, default=None, verbose_name='MAC地址')
     mod_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
     img = models.FileField(verbose_name='图片',upload_to='computer/',null=True)
+
+
+class Admin(models.Model):
+    """管理员"""
+    username = models.CharField(verbose_name="用户名", max_length=32)
+    password = models.CharField(verbose_name="密码", max_length=64)
+
+    def __str__(self):
+        return self.username
