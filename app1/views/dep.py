@@ -5,18 +5,21 @@
 @Created on: 2022/12/16 8:36
 """
 
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 
 from app1 import models
 from app1.utils.form import DepModelForm
+from app1.utils.pageination import Pagination
 
 from openpyxl import load_workbook
 
 
 def dep_list(request):
     queryset = models.Department.objects.all()
+    page_queryset = Pagination(request,queryset)
     context = {
-        'queryset': queryset
+        'queryset': page_queryset.page_queryset,
+        'page_string':page_queryset.html()
     }
 
     return render(request, 'dep_list.html', context)
@@ -28,17 +31,19 @@ def dep_add(request):
      :param request:
      :return:
      """
+    title = '添加部门'
     if request.method == "GET":
         form = DepModelForm()
         context = {
-            "form": form
+            "form": form,
+            'title':title
         }
-        return render(request, 'dep_add.html', context)
+        return render(request, 'add.html', context)
     form = DepModelForm(request.POST)
     if form.is_valid():
         form.save()
         return redirect('/dep/list/')
-    return render(request, 'dep_add.html', {'form': form})
+    return render(request, 'add.html', {'form': form})
 
 
 def dep_delete(request, nid):
