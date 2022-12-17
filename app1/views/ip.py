@@ -26,9 +26,9 @@ def ip_list(request):
     search_type = request.GET.get('search_type')
     if search_type and request.GET.get('q'):
         if search_type == 'ip_addr':
-            search_data['ip_addr__icontains'] = request.GET.get('q')
+            search_data['ip_addr__icontains'] = request.GET.get('q').strip()
         elif search_type == 'mac_addr':
-            search_data['mac_addr__icontains'] = request.GET.get('q')
+            search_data['mac_addr__icontains'] = request.GET.get('q').strip()
 
     queryset = models.IpAddr.objects.filter(**search_data)
     page_object = Pagination(request, queryset)
