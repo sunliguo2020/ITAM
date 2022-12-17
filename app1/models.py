@@ -64,3 +64,9 @@ class IpAddr(models.Model):
     mac_addr = models.CharField(verbose_name='MAC地址', max_length=14)
     interface = models.CharField(verbose_name='接口', max_length=16)
     cap_datetime = models.DateTimeField(verbose_name='采集时间')
+
+    class Meta:
+        # 模型对象返回的记录结果按照哪个字段排序
+        ordering = ['cap_datetime']
+        # 模型类在后台管理中显示的名称
+        verbose_name = 'ARP表'

@@ -20,6 +20,12 @@
                 新增Ip地址</a>
             <div style="float:right;width: 300px">
                 <form method="get">
+                    <div style="float: right">
+                        <select name="search_type" id="">
+                            <option value="ip_addr">IP</option>
+                            <option value="mac_addr">MAC</option>
+                        </select>
+                    </div>
                     <div class="input-group">
                         <input type="text" name='q' class="form-control" placeholder="关键字" value="{{ search_data }}">
                         <span class="input-group-btn">
@@ -28,9 +34,10 @@
                         </button>
                         </span>
                 </form>
-            </div>
 
         </div>
+
+    </div>
     </div>
     <div class="bs-example" data-example-id="panel-without-body-with-table">
         <div class="panel panel-default">
