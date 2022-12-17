@@ -6,6 +6,7 @@
 """
 import csv
 
+import pytz
 from django.shortcuts import render, redirect, HttpResponse
 from openpyxl import load_workbook
 
@@ -16,10 +17,10 @@ from app1.utils.pageination import Pagination
 
 def ip_list(request):
     queryset = models.IpAddr.objects.all()
-    page_object = Pagination(request,queryset)
+    page_object = Pagination(request, queryset)
     context = {
         'queryset': page_object.page_queryset,
-        'page_string':page_object.html()
+        'page_string': page_object.html()
     }
     return render(request, 'ip_list.html', context)
 
@@ -61,7 +62,7 @@ def ip_edit(request, nid):
 
 
 def ip_delete(request, nid):
-    models.IpAddr.objects.filter(id=nid).delete()
+    models.IpAddr.objects.filter(id__gt=100).delete()
     return redirect('/ip/list/')
 
 
@@ -83,9 +84,35 @@ def ip_multi(request):
             'ip_addr': row[0].value,
             'mac_addr': row[1].value,
             'interface': row[2].value,
-            'cap_datetime': row[3].value,
+            # 解决时区问题
+            'cap_datetime': row[3].value.replace(tzinfo=pytz.timezone('UTC'))
         }
 
-        models.IpAddr.objects.create(**data_dict)
+        # 检查前三项是否已经有值，如果日期更新，则更新日期
+        queryset = models.IpAddr.objects.filter(ip_addr=data_dict['ip_addr'],
+                                                mac_addr=data_dict['mac_addr'],
+                                                interface=data_dict['interface'])
+
+        if queryset.exists():
+            print('已经有数据', queryset)
+            for query_row in queryset:
+                print('cap_datetime', data_dict['cap_datetime'])
+                print('query_row.cap_datetime', query_row.cap_datetime)
+                if data_dict['cap_datetime'] > query_row.cap_datetime:
+                    print('更新时间',type(query_row))
+                    query_row.cap_datetime = data_dict['cap_datetime']
+                    query_row.save()
+        else:
+            print('新增数据')
+            models.IpAddr.objects.create(**data_dict)
+        # 检查是否有重复值
+        # if not models.IpAddr.objects.filter(**data_dict).exists():
+        #     models.IpAddr.objects.create(**data_dict)
+        # else:
+        #     print('有重复值')
+        # if models.IpAddr.objects.get_or_create(**data_dict):
+        #     print('有重复值')
+        # else:
+        #     print('没有重复值')
 
     return redirect('/ip/list/')
