@@ -38,6 +38,9 @@ def computer_list(request):
                     queryset = queryset | item.owners.all()
             else:  # 没有搜到使用者
                 queryset = models.Computer.objects.none()
+        elif search_type == 'mac_addr':
+            data_dict['mac_addr__icontains'] = search_data
+            queryset = models.Computer.objects.filter(**data_dict)
 
     else:
         queryset = models.Computer.objects.filter()
