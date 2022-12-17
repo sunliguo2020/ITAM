@@ -26,9 +26,9 @@ def ip_list(request):
     search_type = request.GET.get('search_type')
     if search_type and request.GET.get('q'):
         if search_type == 'ip_addr':
-            search_data['ip_addr__contains'] = request.GET.get('q')
+            search_data['ip_addr__icontains'] = request.GET.get('q')
         elif search_type == 'mac_addr':
-            search_data['mac_addr__contains'] = request.GET.get('q')
+            search_data['mac_addr__icontains'] = request.GET.get('q')
 
     queryset = models.IpAddr.objects.filter(**search_data)
     page_object = Pagination(request, queryset)
@@ -116,16 +116,16 @@ def ip_multi(request):
                                                     interface=data_dict['interface'])
 
             if queryset.exists():
-                print('已经有数据', queryset)
+                # print('已经有数据', queryset)
                 for query_row in queryset:
-                    print('cap_datetime', data_dict['cap_datetime'])
-                    print('query_row.cap_datetime', query_row.cap_datetime)
+                    # print('cap_datetime', data_dict['cap_datetime'])
+                    # print('query_row.cap_datetime', query_row.cap_datetime)
                     if data_dict['cap_datetime'] > query_row.cap_datetime:
                         # print('更新时间',type(query_row))
                         query_row.cap_datetime = data_dict['cap_datetime']
                         query_row.save()
             else:
-                print('新增数据')
+                # print('新增数据')
                 models.IpAddr.objects.create(**data_dict)
 
     return redirect('/ip/list/')
