@@ -65,7 +65,7 @@
                     <td>{{ item.ip_addr }}</td>
                     <td>{{ item.mac_addr }}</td>
                     <td>{{ item.interface }}</td>
-                    <td>{{ item.cap_datetime }}</td>
+                    <td>{{ item.cap_datetime |date:'Y-m-d G:i:s'}}</td>
 
                     <td>
                         <a class="btn btn-primary btn-xs" href="/ip/{{ item.id }}/edit/">编辑</a>

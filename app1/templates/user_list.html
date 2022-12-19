@@ -58,7 +58,7 @@
                     <td>{{ item.username }}</td>
                     <td>{{ item.get_status_display }}</td>
                     <td>{{ item.depart.departname }}</td>
-                    <td>{{ item.createdate }}</td>
+                    <td>{{ item.createdate|date:'Y-m-d G:i:s' }}</td>
 
                     <td>
                         <a class="btn btn-primary btn-xs" href="/user/{{ item.id }}/edit/">编辑</a>

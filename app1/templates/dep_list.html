@@ -54,7 +54,7 @@
                     <tr>
                     <th style="text-align: center;" title="{{ item.id }}">{{ forloop.counter }}</th>
                     <td>{{ item.departname }}</td>
-                    <td>{{ item.createdate }}</td>
+                    <td>{{ item.createdate|date:'Y-m-d G:i:s' }}</td>
 
                     <td>
                         <a class="btn btn-primary btn-xs" href="/dep/{{ item.id }}/edit/">编辑</a>
