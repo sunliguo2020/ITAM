@@ -7,6 +7,7 @@
 import csv
 import os
 from datetime import datetime
+from pprint import pprint
 
 import pytz
 from django.shortcuts import render, redirect, HttpResponse
@@ -76,7 +77,7 @@ def ip_edit(request, nid):
 
 
 def ip_delete(request, nid):
-    models.IpAddr.objects.filter(id__gt=100).delete()
+    models.IpAddr.objects.filter(id=nid).delete()
     return redirect('/ip/list/')
 
 
@@ -92,6 +93,8 @@ def ip_multi(request):
     csv_File = request.FILES.get('csv_file', None)
     if not csv_File:
         return redirect('/ip/list/')
+    elif os.path.splitext(csv_File.name)[1] != '.csv':
+        return redirect('/ip/list/')
     path = 'media/uploads/'
     if not os.path.exists(path):
         os.makedirs(path)
@@ -100,32 +103,61 @@ def ip_multi(request):
         for chunk in csv_File.chunks():
             fp.write(chunk)
     with open(os.path.join(path, csv_File.name), encoding='utf-8') as fp:
+        count = 0
         csv_read = csv.reader(fp)
         for row in csv_read:
+
+            # 先把字符串转成不带时区的datetime
+            dt = datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S')
+            # 把不带时区的datetime转成timestamp再转成秒
+            ts = int(dt.timestamp())
+            # 把秒转成带时区的datetime
+            t = datetime.fromtimestamp(ts, pytz.timezone('Asia/Shanghai'))
+
             data_dict = {
                 'ip_addr': row[0],
                 'mac_addr': row[1],
                 'interface': row[2],
                 # 解决时区问题 时间字符串转为时间 datetime.strptime('2018-03-02 17:41:20', '%Y-%m-%d %H:%M:%S')
-                'cap_datetime': datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S').replace(tzinfo=pytz.timezone('UTC'))
+                'cap_datetime': t
+                # 'cap_datetime': datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S')
             }
+            # # 方法1，先搜索，更新时间，最后save()
+            # # 直接搜索出数据库中时间较早的
+            # queryset = models.IpAddr.objects.filter(ip_addr=data_dict['ip_addr'],
+            #                                         mac_addr=data_dict['mac_addr'],
+            #                                         interface=data_dict['interface'],
+            #                                         cap_datetime__lt=data_dict['cap_datetime'])
+            #
+            # if queryset.exists():
+            #     # print('已经有数据', queryset)
+            #     for query_row in queryset:
+            #         query_row.cap_datetime = data_dict['cap_datetime']
+            #         query_row.save()
+            # else:
+            #     # print('新增数据')
+            #     models.IpAddr.objects.create(**data_dict)
 
-            # 检查前三项是否已经有值，如果日期更新，则更新日期
-            queryset = models.IpAddr.objects.filter(ip_addr=data_dict['ip_addr'],
-                                                    mac_addr=data_dict['mac_addr'],
-                                                    interface=data_dict['interface'])
+            # 方法2、直接update
+            # AttributeError: 'NoneType' object has no attribute 'update'
+            result = models.IpAddr.objects.filter(ip_addr=data_dict['ip_addr'],
+                                                  mac_addr=data_dict['mac_addr'],
+                                                  interface=data_dict['interface'],
+                                                  cap_datetime__lte=data_dict['cap_datetime'])
+            # if result is not None :<class 'django.db.models.query.QuerySet'> <QuerySet []>
+            count += 1
 
-            if queryset.exists():
-                # print('已经有数据', queryset)
-                for query_row in queryset:
-                    # print('cap_datetime', data_dict['cap_datetime'])
-                    # print('query_row.cap_datetime', query_row.cap_datetime)
-                    if data_dict['cap_datetime'] > query_row.cap_datetime:
-                        # print('更新时间',type(query_row))
-                        query_row.cap_datetime = data_dict['cap_datetime']
-                        query_row.save()
+            if result.count() > 0:
+                # <class 'NoneType'> None
+                print(count, ":")
+                # 找到比 2022-04-01 04:00:02+08:00 更早或相同 2022-03-31 19:55:01+00:00
+                print('找到比', data_dict['cap_datetime'], '更早或相同', result.first().cap_datetime)
+
+                result.update(cap_datetime=data_dict['cap_datetime'])
             else:
-                # print('新增数据')
+                print(count, ':')
+                pprint(data_dict)
+                print('找不到数据,新增', type(result), result)
                 models.IpAddr.objects.create(**data_dict)
 
     return redirect('/ip/list/')
