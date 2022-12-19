@@ -122,42 +122,44 @@ def ip_multi(request):
                 'cap_datetime': t
                 # 'cap_datetime': datetime.strptime(row[3], '%Y-%m-%d %H:%M:%S')
             }
-            # # 方法1，先搜索，更新时间，最后save()
-            # # 直接搜索出数据库中时间较早的
-            # queryset = models.IpAddr.objects.filter(ip_addr=data_dict['ip_addr'],
-            #                                         mac_addr=data_dict['mac_addr'],
-            #                                         interface=data_dict['interface'],
-            #                                         cap_datetime__lt=data_dict['cap_datetime'])
-            #
-            # if queryset.exists():
-            #     # print('已经有数据', queryset)
-            #     for query_row in queryset:
-            #         query_row.cap_datetime = data_dict['cap_datetime']
-            #         query_row.save()
-            # else:
-            #     # print('新增数据')
-            #     models.IpAddr.objects.create(**data_dict)
 
-            # 方法2、直接update
-            # AttributeError: 'NoneType' object has no attribute 'update'
-            result = models.IpAddr.objects.filter(ip_addr=data_dict['ip_addr'],
-                                                  mac_addr=data_dict['mac_addr'],
-                                                  interface=data_dict['interface'],
-                                                  cap_datetime__lte=data_dict['cap_datetime'])
-            # if result is not None :<class 'django.db.models.query.QuerySet'> <QuerySet []>
-            count += 1
+            # 方法1，先搜索，更新时间，最后save()
+            # 直接搜索出数据库中时间较早的
 
-            if result.count() > 0:
-                # <class 'NoneType'> None
-                print(count, ":")
-                # 找到比 2022-04-01 04:00:02+08:00 更早或相同 2022-03-31 19:55:01+00:00
-                print('找到比', data_dict['cap_datetime'], '更早或相同', result.first().cap_datetime)
+            queryset = models.IpAddr.objects.filter(ip_addr=data_dict['ip_addr'],
+                                                    mac_addr=data_dict['mac_addr'],
+                                                    interface=data_dict['interface'],
+                                                    cap_datetime__lte=data_dict['cap_datetime'])
 
-                result.update(cap_datetime=data_dict['cap_datetime'])
+            if queryset.exists():
+                print('已经有数据', queryset)
+                for query_row in queryset:
+                    query_row.cap_datetime = data_dict['cap_datetime']
+                    query_row.save()
             else:
-                print(count, ':')
-                pprint(data_dict)
-                print('找不到数据,新增', type(result), result)
+                print('新增数据')
                 models.IpAddr.objects.create(**data_dict)
+
+            # # 方法2、直接update 有问题，烧脑筋
+            # # AttributeError: 'NoneType' object has no attribute 'update'
+            # result = models.IpAddr.objects.filter(ip_addr=data_dict['ip_addr'],
+            #                                       mac_addr=data_dict['mac_addr'],
+            #                                       interface=data_dict['interface'],
+            #                                       cap_datetime__gte=data_dict['cap_datetime'])
+            # # if result is not None :<class 'django.db.models.query.QuerySet'> <QuerySet []>
+            # count += 1
+            #
+            # if result.count() > 0:
+            #     # <class 'NoneType'> None
+            #     print(count, ":",result.count())
+            #     # 找到比 2022-04-01 04:00:02+08:00 更早或相同 2022-03-31 19:55:01+00:00
+            #     print('找到比', data_dict['cap_datetime'], '更早或相同', result.first().cap_datetime)
+            #
+            #     result.update(cap_datetime=data_dict['cap_datetime'])
+            # else:
+            #     print(count, ':')
+            #     pprint(data_dict)
+            #     print('找不到数据,新增', type(result), result)
+            #     models.IpAddr.objects.create(**data_dict)
 
     return redirect('/ip/list/')
