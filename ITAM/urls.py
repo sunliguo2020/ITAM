@@ -22,6 +22,7 @@ from app1.views import computer, user, dep, account, admin, ip
 
 app_name = 'app1'
 urlpatterns = [
+    path('', account.login),
     # path('admin/', admin.site.urls),
 
     # 登录
