@@ -125,19 +125,25 @@ def ip_multi(request):
 
             # 方法1，先搜索，更新时间，最后save()
             # 直接搜索出数据库中时间较早的
+            # 第一导入的时候没问题。
+            # 第二次同样的数据导入，时间早的又重新插入了。
 
             queryset = models.IpAddr.objects.filter(ip_addr=data_dict['ip_addr'],
                                                     mac_addr=data_dict['mac_addr'],
                                                     interface=data_dict['interface'],
-                                                    cap_datetime__lte=data_dict['cap_datetime'])
-
+                                                    # cap_datetime__lte=data_dict['cap_datetime']
+                                                    )
+            count += 1
+            print('count:',count)
             if queryset.exists():
-                print('已经有数据', queryset)
-                for query_row in queryset:
-                    query_row.cap_datetime = data_dict['cap_datetime']
-                    query_row.save()
+                print('找到:',queryset.count())
+                for query_obj in queryset:
+                    if query_obj.cap_datetime <= data_dict['cap_datetime']:
+                        query_obj.cap_datetime = data_dict['cap_datetime']
+                        query_obj.save()
             else:
-                print('新增数据')
+                print('新增数据:', end='')
+                pprint(data_dict)
                 models.IpAddr.objects.create(**data_dict)
 
             # # 方法2、直接update 有问题，烧脑筋
