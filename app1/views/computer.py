@@ -25,7 +25,7 @@ def computer_list(request):
     if search_data:
         # 查询条件
         if search_type == 'seri':
-            data_dict['serial_number__contains'] = search_data
+            data_dict['serial_number__icontains'] = search_data
             queryset = models.Computer.objects.filter(**data_dict)
         elif search_type == 'owner':
             # data_dict['owner__contains'] = search_data
