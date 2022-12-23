@@ -134,11 +134,14 @@ def ip_multi(request):
                                                     # cap_datetime__lte=data_dict['cap_datetime']
                                                     )
             count += 1
-            print('count:',count)
+            print('count:', count)
             if queryset.exists():
-                print('找到:',queryset.count())
+                print('找到:', queryset.count())
                 for query_obj in queryset:
+                    print("data_dict['cap_datetime']", data_dict['cap_datetime'])
+                    print('query_obj.cap_datetime', query_obj.cap_datetime)
                     if query_obj.cap_datetime <= data_dict['cap_datetime']:
+
                         query_obj.cap_datetime = data_dict['cap_datetime']
                         query_obj.save()
             else:

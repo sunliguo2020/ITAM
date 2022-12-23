@@ -27,6 +27,7 @@ class User(models.Model):
 
     class Meta:
         verbose_name = '人员基本信息'
+        verbose_name_plural = verbose_name
 
     def __str__(self):
         return self.username
@@ -49,6 +50,10 @@ class Computer(models.Model):
     mod_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
     img = models.FileField(verbose_name='图片', upload_to='computer/', null=True)
 
+    class Meta:
+        verbose_name = '电脑'
+        verbose_name_plural = verbose_name
+
 
 class Admin(models.Model):
     """管理员"""
@@ -70,3 +75,4 @@ class IpAddr(models.Model):
         ordering = ['cap_datetime']
         # 模型类在后台管理中显示的名称
         verbose_name = 'ARP表'
+        verbose_name_plural = verbose_name
