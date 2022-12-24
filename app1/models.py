@@ -7,6 +7,10 @@ class Department(models.Model):
     departname = models.CharField(verbose_name='部门名称', max_length=16, unique=True)
     createdate = models.DateTimeField(verbose_name='创建日期', auto_now_add=True)
 
+    class Meta:
+        verbose_name = '部门表'
+        verbose_name_plural = verbose_name
+
     def __str__(self):
         return self.departname
 
@@ -48,7 +52,7 @@ class Computer(models.Model):
     production_date = models.DateField(verbose_name='生产日期', default=timezone.now)
     mac_addr = models.CharField(max_length=14, default=None, verbose_name='MAC地址')
     mod_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
-    img = models.FileField(verbose_name='图片', upload_to='computer/', blank=True,null=True)
+    img = models.FileField(verbose_name='图片', upload_to='computer/', blank=True, null=True)
 
     class Meta:
         verbose_name = '电脑'

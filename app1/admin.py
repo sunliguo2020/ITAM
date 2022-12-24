@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import IpAddr, Computer, User
+from .models import IpAddr, Computer, User,Department
 
 
 @admin.register(IpAddr)
@@ -44,3 +44,9 @@ class ComputerAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'depart', 'status', 'createdate']
     search_fields = ['username', 'depart__departname']
+
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ['departname','createdate']
+    search_fields = ['departname']
