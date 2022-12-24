@@ -48,7 +48,7 @@ class Computer(models.Model):
     production_date = models.DateField(verbose_name='生产日期', default=timezone.now)
     mac_addr = models.CharField(max_length=14, default=None, verbose_name='MAC地址')
     mod_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
-    img = models.FileField(verbose_name='图片', upload_to='computer/', null=True)
+    img = models.FileField(verbose_name='图片', upload_to='computer/', blank=True,null=True)
 
     class Meta:
         verbose_name = '电脑'
