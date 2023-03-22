@@ -41,6 +41,7 @@ class Computer(models.Model):
     brand_choices = (
         (0, '联想'),
         (1, '惠普'),
+        (2, '组装'),
     )
     brand = models.SmallIntegerField(verbose_name='品牌', choices=brand_choices, default=0)
     computer_type = models.CharField(max_length=16, verbose_name='型号', null=True)
