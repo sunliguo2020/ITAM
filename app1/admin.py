@@ -31,8 +31,9 @@ class ComputerAdmin(admin.ModelAdmin):
                     'owner',
                     'production_date',
                     'mac_addr',
+                    'computer_img',
+                    'dis_mac_img',
                     'mod_time',
-                    'img',
                     ]
     # Related Field got invalid lookup: icontains
     search_fields = ['serial_number', 'mac_addr', 'owner__username']

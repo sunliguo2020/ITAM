@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.utils.html import format_html
 
 
 # Create your models here.
@@ -74,16 +75,39 @@ class Computer(models.Model):
     # 生成字段 owner_id
     owner = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True,
                               verbose_name='拥有者',
-                              related_name='owners')
+                              related_name='computer_owners')
     production_date = models.DateField(verbose_name='生产日期', default=timezone.now)
     mac_addr = models.CharField(max_length=14, default=None, verbose_name='MAC地址')
     mod_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
-    img = models.FileField(verbose_name='铭牌图片', upload_to='computer/', blank=True, null=True)
+    img = models.FileField(verbose_name='铭牌图片', upload_to='computer/%Y/%m/', blank=True, null=True)
+    mac_img = models.FileField(verbose_name='MAC地址图片', upload_to='MAC/%Y/%m/', blank=True, null=True)
 
     class Meta:
         verbose_name = '电脑'
         verbose_name_plural = verbose_name
 
+    #  后台列表显示图片
+    def computer_img(self):
+        if self.img:
+            return format_html(
+                '<img src="/media/{}" width="156px" height="98px"/>',
+                self.img,
+            )
+        else:
+            return format_html(
+                '<img src="/media/computer/none.jpg" width="156px" height="98px"/>',
+            )
+
+    def dis_mac_img(self):
+        if self.mac_img:
+            return format_html(
+                '<img src="/media/{}" width="156px" height="98px"/>',
+                self.mac_img,
+            )
+        else:
+            return format_html(
+                '<img src="/media/computer/none.jpg" width="156px" height="98px"/>',
+            )
 
 class Admin(models.Model):
     """管理员"""
