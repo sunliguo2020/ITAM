@@ -43,7 +43,7 @@ class ComputerAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'depart', 'status', 'createdate']
+    list_display = ['username', 'depart','room_no', 'status', 'createdate','last_mod_time']
     search_fields = ['username', 'depart__departname']
 
 
