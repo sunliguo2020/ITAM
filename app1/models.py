@@ -4,6 +4,9 @@ from django.utils import timezone
 
 # Create your models here.
 class Department(models.Model):
+    """
+    部门管理
+    """
     departname = models.CharField(verbose_name='部门名称', max_length=16, unique=True)
     createdate = models.DateTimeField(verbose_name='创建日期', auto_now_add=True)
 
@@ -37,7 +40,29 @@ class User(models.Model):
         return self.username
 
 
+class BaseModel(models.Model):
+    brand = models.SmallIntegerField(verbose_name='品牌', default=0)
+    products_type = models.CharField(max_length=16, verbose_name='型号', null=True)
+    serial_number = models.CharField(max_length=32, verbose_name='序列号', unique=True)
+    # 生成字段 owner_id
+    owner = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True,
+                              verbose_name='拥有者',
+                              related_name='owners')
+    production_date = models.DateField(verbose_name='生产日期', default=timezone.now)
+    mac_addr = models.CharField(max_length=14, default=None, verbose_name='MAC地址')
+
+    created_time = models.DateTimeField('创建时间', auto_now_add=True)
+    last_mod_time = models.DateTimeField('修改时间', auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 class Computer(models.Model):
+    """
+    电脑管理
+    """
+
     brand_choices = (
         (0, '联想'),
         (1, '惠普'),
@@ -53,7 +78,7 @@ class Computer(models.Model):
     production_date = models.DateField(verbose_name='生产日期', default=timezone.now)
     mac_addr = models.CharField(max_length=14, default=None, verbose_name='MAC地址')
     mod_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
-    img = models.FileField(verbose_name='图片', upload_to='computer/', blank=True, null=True)
+    img = models.FileField(verbose_name='铭牌图片', upload_to='computer/', blank=True, null=True)
 
     class Meta:
         verbose_name = '电脑'
@@ -70,6 +95,9 @@ class Admin(models.Model):
 
 
 class IpAddr(models.Model):
+    """
+    ip地址管理
+    """
     ip_addr = models.CharField(verbose_name='IP地址', max_length=16)
     mac_addr = models.CharField(verbose_name='MAC地址', max_length=14)
     interface = models.CharField(verbose_name='接口', max_length=16)
@@ -80,4 +108,14 @@ class IpAddr(models.Model):
         ordering = ['cap_datetime']
         # 模型类在后台管理中显示的名称
         verbose_name = 'ARP表'
+        verbose_name_plural = verbose_name
+
+
+class Printer(BaseModel):
+    """
+    打印机管理
+    """
+
+    class Meta:
+        verbose_name = '打印机'
         verbose_name_plural = verbose_name
