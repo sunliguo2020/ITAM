@@ -4,13 +4,13 @@
 @contact: QQ376440229
 @Created on: 2022/12/16 8:34
 """
-from app1 import models
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
+from openpyxl import load_workbook
 
-from app1.utils.form import  UserModelForm, DepModelForm
+from app1 import models
+from app1.utils.form import UserModelForm
 from app1.utils.pageination import Pagination
 
-from openpyxl import load_workbook
 
 def user_list(request):
     # 构造搜索
