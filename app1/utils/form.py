@@ -16,7 +16,7 @@ from app1.utils.encrypt import md5
 
 class ComputerModelForm(BootStrapModelForm):
     img = forms.ImageField(required=False, label='铭牌照片')
-    bootstrap_exclude_fields = ['img']
+    bootstrap_exclude_fields = ['img','mac_img']
 
     class Meta:
         fields = ['brand',
@@ -26,6 +26,7 @@ class ComputerModelForm(BootStrapModelForm):
                   'production_date',
                   'mac_addr',
                   'img',
+                  'mac_img'
                   ]
         model = models.Computer
         labels = {
