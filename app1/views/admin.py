@@ -39,6 +39,13 @@ def admin_add(request):
 
 
 def admin_delete(request, nid):
+    # TODO 测试
+    """
+
+    :param request:
+    :param nid:
+    :return:
+    """
     cur_user_id = request.session.get('info').get('id')
     if nid != cur_user_id:
         models.Admin.objects.filter(id=nid).delete()
