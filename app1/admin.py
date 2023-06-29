@@ -25,16 +25,17 @@ class IpAddrAdmin(admin.ModelAdmin):
 
 @admin.register(Computer)
 class ComputerAdmin(admin.ModelAdmin):
-    list_display = ['brand',
-                    'computer_type',
-                    'serial_number',
-                    'owner',
-                    'production_date',
-                    'mac_addr',
-                    'computer_img',
-                    'dis_mac_img',
-                    'mod_time',
-                    ]
+    list_display = [
+        'serial_number',
+        'brand',
+        'computer_type',
+        'owner',
+        'production_date',
+        'mac_addr',
+        'computer_img',
+        'dis_mac_img',
+        'mod_time',
+    ]
     # Related Field got invalid lookup: icontains
     search_fields = ['serial_number', 'mac_addr', 'owner__username']
     list_display_links = ['serial_number']
