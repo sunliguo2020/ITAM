@@ -106,6 +106,9 @@ class Computer(models.Model):
                 '<img src="/media/computer/none.jpg" width="156px" height="98px"/>',
             )
 
+    # 自定义列名
+    computer_img.short_description = '铭牌图片'
+
     def dis_mac_img(self):
         if self.mac_img:
             return format_html(
@@ -116,6 +119,9 @@ class Computer(models.Model):
             return format_html(
                 '<img src="/media/computer/none.jpg" width="156px" height="98px"/>',
             )
+
+    # 自定义列名：
+    dis_mac_img.short_description = 'MAC图片'
 
 
 class Admin(models.Model):
