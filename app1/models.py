@@ -85,7 +85,7 @@ class Computer(models.Model):
                               verbose_name='拥有者',
                               related_name='computer_owners')
     production_date = models.DateField(verbose_name='生产日期', default=timezone.now)
-    mac_addr = models.CharField(max_length=14, default=None, verbose_name='MAC地址')
+    mac_addr = models.CharField(max_length=14, default='FFFF-FFFF-FFFF', verbose_name='MAC地址')
     mod_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
     img = models.FileField(verbose_name='铭牌图片', upload_to='computer/%Y/%m/', blank=True, null=True)
     mac_img = models.FileField(verbose_name='MAC地址图片', upload_to='MAC/%Y/%m/', blank=True, null=True)
