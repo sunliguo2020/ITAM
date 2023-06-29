@@ -55,7 +55,9 @@ ROOT_URLCONF = 'ITAM.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # 定义了一个目录列表，模板引擎按列表顺序搜索这些目录以查找模板源文件。
         'DIRS': [],
+        # 告诉模板引擎是否应该进入每个已安装的应用中查找模板。通常请将该选项保持为True。
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
