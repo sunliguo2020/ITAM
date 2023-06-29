@@ -30,7 +30,7 @@ class User(models.Model):
     )
     username = models.CharField(verbose_name='用户名称', max_length=16, unique=True)
     depart = models.ForeignKey(verbose_name='所在部门', to=Department, on_delete=models.SET_NULL, null=True)
-    room_no = models.CharField(verbose_name='房间号', max_length=8, default=None, null=True,blank=True)
+    room_no = models.CharField(verbose_name='房间号', max_length=8, default=None, null=True, blank=True)
     status = models.SmallIntegerField(verbose_name='状态', choices=STATUS, default=None, null=True)
     createdate = models.DateTimeField(verbose_name='创建日期', auto_now_add=True)
     last_mod_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
@@ -65,13 +65,19 @@ class Computer(models.Model):
     """
     电脑管理
     """
-
+    # 品牌选择
     brand_choices = (
         (0, '联想'),
         (1, '惠普'),
         (2, '组装'),
     )
+    # 是否报废
+    scrap_choices = (
+        (0, '正常'),
+        (1, '报废'),
+    )
     brand = models.SmallIntegerField(verbose_name='品牌', choices=brand_choices, default=0)
+    scrap = models.SmallIntegerField(verbose_name='是否报废', choices=scrap_choices, default=0)
     computer_type = models.CharField(max_length=16, verbose_name='型号', null=True)
     serial_number = models.CharField(max_length=32, verbose_name='序列号', unique=True)
     # 生成字段 owner_id
