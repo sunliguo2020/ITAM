@@ -52,7 +52,7 @@ class BaseModel(models.Model):
                               verbose_name='拥有者',
                               related_name='owners')
     production_date = models.DateField(verbose_name='生产日期', default=timezone.now)
-    mac_addr = models.CharField(max_length=14, default=None, verbose_name='MAC地址')
+    mac_addr = models.CharField(max_length=14, default='FFFF-FFFF-FFFF', verbose_name='MAC地址')
 
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
@@ -150,10 +150,24 @@ class IpAddr(models.Model):
         verbose_name_plural = verbose_name
 
 
+class PrinterBrand(models.Model):
+    brand_old = models.CharField(max_length=10, verbose_name='品牌', unique=True)
+    created_time = models.DateTimeField('创建时间', auto_now_add=True)
+    last_mod_time = models.DateTimeField('修改时间', auto_now=True)
+
+    def __str__(self):
+        return self.brand_old
+
+    class Meta:
+        verbose_name = '打印机品牌'
+        verbose_name_plural = verbose_name
+
+
 class Printer(BaseModel):
     """
     打印机管理
     """
+    brand = models.ForeignKey(to=PrinterBrand, verbose_name='打印机品牌', on_delete=models.DO_NOTHING)
 
     class Meta:
         verbose_name = '打印机'

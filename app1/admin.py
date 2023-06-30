@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import IpAddr, Computer, User, Department
+from .models import IpAddr, Computer, User, Department, Printer, PrinterBrand
 
 
 @admin.register(IpAddr)
@@ -53,10 +53,22 @@ class ComputerAdmin(admin.ModelAdmin):
     autocomplete_fields = ('owner',)  # owner 外键
 
 
+@admin.register(Printer)
+class PrinterAdmin(admin.ModelAdmin):
+    autocomplete_fields = ('brand', 'owner')
+
+
+@admin.register(PrinterBrand)
+class PrinterBrandAdmin(admin.ModelAdmin):
+    list_display = ('brand_old', 'created_time', 'last_mod_time')
+    search_fields = ('brand_old',)
+
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'depart', 'room_no', 'status', 'createdate', 'last_mod_time']
     search_fields = ['username', 'depart__departname']
+    autocomplete_fields = ('depart',)
 
 
 @admin.register(Department)
